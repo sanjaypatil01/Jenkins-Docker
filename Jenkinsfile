@@ -9,12 +9,7 @@ pipeline {
                 /*For Mac & Linux machine */
                sh  'mvn clean package'
             }
- 
-			steps {
-				'sh docker build . -t tomcatwebapp:{env.BUILD_ID}'	
-			
-			}
- 
+  
             post{
                 success{
                     echo 'Now Archiving ....'
@@ -22,7 +17,16 @@ pipeline {
                     archiveArtifacts artifacts : '**/*.war'
                 }
             }
-		}   
+		}
+
+				
+		stage ('Create tomcat Docker Image'){
+				steps {
+					'sh docker build . -t tomcatwebapp:{env.BUILD_ID}'	
+				
+				}
+				
+		}
 	}
 	
 }	
